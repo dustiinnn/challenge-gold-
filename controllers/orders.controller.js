@@ -1,14 +1,16 @@
+const { response } = require("express");
 const Orders = require("../database/models/orders.model");
 const OrderItems = require("../database/models/ordersitems.model");
 const Products = require("../database/models/products.model");
+const errorResponse = require("../helper/error.helper");
+const Response = require("../helper/response.helper");
 
 class OrdersController {
-  async getOrders(req, res, next) {
+  async getOrders(req, res) {
     try {
       const result = await Orders.findAll({
-        include: {
-          model: Products,
-        },
+        where: { id: req.params.id, userId: req.body.id },
+        // include: { OrderItems },
       });
       res.status(200).json({
         message: result,
@@ -18,81 +20,69 @@ class OrdersController {
         message: error,
       });
     }
-    /* const resultById = await Orders.findAll({
-      where: { id: req.params.id },
-      attributes: ["UserId", "StatusOrders", "TotalPrice"],
-    }); */
   }
 
   async insertOrders(req, res, next) {
     try {
-      const xp = {
-        OrderId: req.body.OrderId,
-        ProductId: req.body.ProductId,
-        Qty: req.body.Qty,
-        Price: req.body.Price,
+      const insert = {
+        userId: req.body.ID,
+        productId: req.body.productId,
+        qty: req.body.qty,
       };
-      console.log(xp);
-      const result = await OrderItems.create(xp);
+      const cekuserId = await Orders.create({
+        userId: insert.userId,
+        statusorders: false,
+      });
 
-      // const resultById = await Orders.create({
-      //   UserId: req.body.UserId,
-      //   StatusOrders: req.body.StatusOrders,
-      //   TotalPrice: req.body.TotalPrice,
-      // });
-      // res.status(200).json({
-      //   message: "Success!",
-      //   data: resultById,
-      // });
-      res.status(200).json({
-        //message: "Success!",
-        data: insert,
+      const checkharga = await Products.findOne({
+        where: { id: insert.productId },
+        attributes: ["id", "stock", "price"],
       });
+
+      let totalharga = insert.qty * parseInt(checkharga.price);
+      const orderItems = {
+        orderId: cekuserId.id,
+        productId: insert.productId,
+        qty: insert.qty,
+        price: totalharga,
+      };
+
+      const insertOrderItems = await OrderItems.create(orderItems);
+
+      return new Response(res, 200, insertOrderItems);
     } catch (error) {
-      res.status(400).json({
-        message: error,
-      });
+      next(error);
     }
   }
 
   async updateOrders(req, res, next) {
     try {
-      const result = await Orders.update({
-        UserId: req.body.UserId,
-        ProductName: req.body.ProductName,
+      const insert = {
+        userId: req.body.ID,
+        orderId: req.params.id,
+        statusorders: req.body.statusorders,
+      };
+
+      const harga = await Orders.findOne({
+        where: { userId: insert.userId, id: insert.orderId },
+        include: { model: OrderItems },
       });
-      res.status(200).json(
-        {
-          message: "Order update succesfully!",
-          orders: result,
-        },
-        {
-          where: {
-            id: req.id,
-          },
-        }
-      );
+
+      console.log(harga);
+      if (!harga) {
+        throw new errorResponse(404, "Order not found");
+      }
+
+      const ord = await Orders.update({
+        totalprice: harga.OrderItems.price,
+        statusorders: insert.statusorders,
+      });
+
+      console.log("test2");
+      return new Response(res, 200, ord);
     } catch (error) {
       res.json({
         message: "Order update failed.",
-        orders: error,
-      });
-    }
-  }
-
-  async deleteOrder(req, res, next) {
-    try {
-      const { id } = req.params;
-      const result = await Orders.destroy({
-        where: { id },
-      });
-      res.status(200).json({
-        message: "Order delete succesfully!",
-        orders: result,
-      });
-    } catch (error) {
-      res.json({
-        message: "Order delete failed.",
         orders: error,
       });
     }

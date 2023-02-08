@@ -5,7 +5,7 @@ class ProductsController {
   async getProducts(req, res) {
     try {
       const result = await Products.findAll({
-        attributes: ["UserId", "ProductName", "Stock", "Price"],
+        attributes: ["userId", "productname", "stock", "price"],
       });
       console.log(result);
       if (!result) {
@@ -27,12 +27,12 @@ class ProductsController {
 
   async insertProducts(req, res) {
     try {
-      const { UserId, ProductName, Price, Stock } = req.body;
+      const { userId, productname, price, stock } = req.body;
       const createProduct = await Products.create({
-        UserId,
-        ProductName,
-        Price,
-        Stock,
+        userId,
+        productname,
+        price,
+        stock,
       });
       res.status(200).json({
         message: "Product insert succesfully!",
@@ -45,28 +45,7 @@ class ProductsController {
       });
     }
   }
-  // async updateProducts(req, res){
-  //     try{
-  //         const result = await Products.update(
-  //         {
-  //             product : req.body.product
-  //         },
-  //         {
-  //             where:{
-  //                 id: req.body.id,
-  //                 UserId: req.UserId
-  //             }
-  //         })
-  //         res.status(200).json({
-  //             message: 'Product update successfully!',
-  //             items : result
-  //         })
-  //     }catch(error){
-  //         res.json({
-  //             message:'Product update failed.',
-  //         })
-  //     }
-  // }
+
   async deleteProducts(req, res) {
     try {
       const result = await Products.destroy({

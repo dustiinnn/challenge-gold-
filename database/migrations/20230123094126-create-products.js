@@ -9,24 +9,24 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      Stock: {
+      stock: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      ProductName: {
+      productname: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      UserId: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
           model: "Users",
           key: "id",
-          as: "UserId",
+          as: "userId",
         },
       },
-      Price: {
+      price: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
@@ -40,6 +40,7 @@ module.exports = {
       },
       deletedAt: {
         type: Sequelize.DATE,
+        allowNull: true,
       },
     });
   },

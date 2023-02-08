@@ -9,15 +9,15 @@ Orders.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    UserId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    StatusOrders: {
+    statusorders: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    TotalPrice: {
+    totalprice: {
       type: DataTypes.DOUBLE,
       allowNull: true,
     },

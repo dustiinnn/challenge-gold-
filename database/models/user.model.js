@@ -9,16 +9,13 @@ Users.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    FullName: {
+    fullname: {
       type: DataTypes.STRING,
     },
-    Email: {
+    email: {
       type: DataTypes.STRING,
     },
-    Password: {
-      type: DataTypes.STRING,
-    },
-    Phone: {
+    password: {
       type: DataTypes.STRING,
     },
   },

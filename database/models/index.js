@@ -2,45 +2,40 @@ const Users = require("./user.model");
 const Products = require("./products.model");
 const Orders = require("./orders.model");
 const sequelize = require("./sequelize");
+const orderItems = require("./ordersitems.model");
 
-// Products.belongsTo(Users,{
-//     as:'owner',
-//     foreignKey:'UserId'
-// })
-
-// Products.hasOne(Orders)
-
-// Users.hasMany(Products,{
-//     as: 'products'
-// })
-
-// Users.hasMany(Orders,{
-//     as: 'orders'
-// })
 Users.hasMany(Products, {
-  foreignKey: "UserId",
+  foreignKey: "userId",
 });
 
 Products.belongsTo(Users, {
-  foreignKey: "UserId",
+  foreignKey: "userId",
 });
 
 Products.belongsToMany(Orders, {
-  through: "OrderItems",
-  foreignKey: "ProductId",
+  through: "orderItems",
+  foreignKey: "productId",
 });
 
 Orders.belongsToMany(Products, {
-  through: "OrderItems",
-  foreignKey: "OrderId",
+  through: "orderItems",
+  foreignKey: "orderId",
 });
 
 Users.hasMany(Orders, {
-  foreignKey: "UserId",
+  foreignKey: "userId",
 });
 
 Orders.belongsTo(Users, {
-  foreignKey: "UserId",
+  foreignKey: "userId",
+});
+
+orderItems.belongsTo(Orders, {
+  foreignKey: "orderId",
+});
+
+Orders.hasOne(orderItems, {
+  foreignKey: "orderId",
 });
 
 module.exports = {

@@ -9,20 +9,20 @@ Products.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    Stock: {
+    stock: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    ProductName: {
+    productname: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    UserId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      field: "UserId",
+      field: "userId",
     },
-    Price: {
+    price: {
       type: DataTypes.DOUBLE,
       allowNull: true,
     },

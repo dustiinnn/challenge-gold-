@@ -1,11 +1,10 @@
 const router = require("express").Router();
 const { OrdersController } = require("../controllers/orders.controller");
 
-const ordersContro = new OrdersController();
+const ordersController = new OrdersController();
 
-router.get("/v1/orders/:id", ordersContro.getOrders);
-router.post("/v1/orders", ordersContro.insertOrders);
-router.put("/v1/orders", ordersContro.updateOrders);
-router.delete("/v1/orders", ordersContro.deleteOrder);
+router.get("/v1/orders/:id", ordersController.getOrders);
+router.post("/v1/orders", ordersController.insertOrders);
+router.patch("/v1/orders/:id", ordersController.updateOrders);
 
 module.exports = router;
